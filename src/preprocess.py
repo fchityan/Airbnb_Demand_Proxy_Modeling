@@ -22,7 +22,6 @@ def split_and_scale(
         target,
         test_size=test_size,
         random_state=random_state,
-        stratify=target,
     )
 
     scaler = StandardScaler()

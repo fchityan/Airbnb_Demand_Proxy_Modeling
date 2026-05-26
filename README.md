@@ -8,10 +8,10 @@ The core analysis is in:
 ## Repository Structure
 
 - `Airbnb Market Analysis.ipynb`: End-to-end exploratory and modeling notebook.
-- `src/data_loader.py`: Builds a synthetic binary-classification dataset.
+- `src/data_loader.py`: Builds a synthetic regression dataset.
 - `src/preprocess.py`: Splits train/test sets and scales features.
 - `src/train_model.py`: Trains a Random Forest model and computes feature importance.
-- `src/evaluate.py`: Computes validation metrics, threshold tuning table, and summary JSON.
+- `src/evaluate.py`: Computes regression validation metrics and summary JSON.
 - `output/`: Stores generated model artifacts.
 
 ## Generated Output Files
@@ -20,7 +20,6 @@ The scripted pipeline writes the following files to `output/`:
 
 - `feature_importance.csv`
 - `validation_metrics.csv`
-- `threshold_tuning.csv`
 - `summary.json`
 
 ## Generate Output Artifacts
@@ -46,8 +45,8 @@ model = train_model(x_train, y_train)
 feature_importance = build_feature_importance(model, list(x_train.columns))
 feature_importance.to_csv(output_dir / 'feature_importance.csv', index=False)
 
-y_proba = model.predict_proba(x_test)[:, 1]
-evaluate_and_save_outputs(y_test, y_proba, output_dir)
+y_pred = model.predict(x_test)
+evaluate_and_save_outputs(y_test, y_pred, output_dir)
 
 print('Generated files in output/:')
 for p in sorted(output_dir.glob('*')):

@@ -23,6 +23,11 @@ The primary notebook is [Airbnb Market Analysis.ipynb](Airbnb Market Analysis.ip
 - output/validation_metrics.csv: regression metrics comparison across mean baseline, linear regression, and XGBoost.
 - output/summary.json: summary statistics and best-model snapshot by RMSE.
 
+## Quick Run
+- Install dependencies: `pip install -r requirements.txt`
+- Run full pipeline: `python -m src.run_pipeline`
+- Run tests: `python -m unittest discover -s tests -v`
+
 ## Limitations
 - Current pipeline uses a synthetic dataset scaffold for deterministic demonstration.
 - Production deployment requires validation against real market data and drift monitoring.

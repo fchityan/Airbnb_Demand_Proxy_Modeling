@@ -14,9 +14,14 @@ The primary notebook is [Airbnb Market Analysis.ipynb](Airbnb Market Analysis.ip
 
 ## Methodology
 - Data preparation: train and test split with feature scaling.
-- Model: random forest regression baseline.
+- Models: mean-line baseline, linear regression, and XGBoost regressor.
 - Evaluation: MAE, RMSE, and R2 on holdout data.
-- Explainability: ranked feature importance from trained model outputs.
+- Explainability: coefficient-based influence (linear regression) and feature importances (XGBoost).
+
+## Outputs
+- output/feature_importance.csv: combined feature importance table for linear regression and XGBoost.
+- output/validation_metrics.csv: regression metrics comparison across mean baseline, linear regression, and XGBoost.
+- output/summary.json: summary statistics and best-model snapshot by RMSE.
 
 ## Limitations
 - Current pipeline uses a synthetic dataset scaffold for deterministic demonstration.

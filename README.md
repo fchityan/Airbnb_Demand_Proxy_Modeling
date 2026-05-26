@@ -5,6 +5,56 @@ This project analyzes Airbnb demand patterns in Dublin and builds machine learni
 The core analysis is in:
 - `Airbnb Market Analysis.ipynb`
 
+## Repository Structure
+
+- `Airbnb Market Analysis.ipynb`: End-to-end exploratory and modeling notebook.
+- `src/data_loader.py`: Builds a synthetic binary-classification dataset.
+- `src/preprocess.py`: Splits train/test sets and scales features.
+- `src/train_model.py`: Trains a Random Forest model and computes feature importance.
+- `src/evaluate.py`: Computes validation metrics, threshold tuning table, and summary JSON.
+- `output/`: Stores generated model artifacts.
+
+## Generated Output Files
+
+The scripted pipeline writes the following files to `output/`:
+
+- `feature_importance.csv`
+- `validation_metrics.csv`
+- `threshold_tuning.csv`
+- `summary.json`
+
+## Generate Output Artifacts
+
+From the project root, run:
+
+```bash
+python - <<'PY'
+from pathlib import Path
+
+from src.data_loader import load_data
+from src.preprocess import split_and_scale
+from src.train_model import train_model, build_feature_importance
+from src.evaluate import evaluate_and_save_outputs
+
+output_dir = Path('output')
+output_dir.mkdir(parents=True, exist_ok=True)
+
+df = load_data(random_state=42, n_samples=2000)
+x_train, x_test, y_train, y_test = split_and_scale(df)
+model = train_model(x_train, y_train)
+
+feature_importance = build_feature_importance(model, list(x_train.columns))
+feature_importance.to_csv(output_dir / 'feature_importance.csv', index=False)
+
+y_proba = model.predict_proba(x_test)[:, 1]
+evaluate_and_save_outputs(y_test, y_proba, output_dir)
+
+print('Generated files in output/:')
+for p in sorted(output_dir.glob('*')):
+	print('-', p.name)
+PY
+```
+
 ## Project Goal
 
 The notebook explores whether listing characteristics, room-type preferences, neighbourhood interests, and trip behavior can explain demand.

@@ -1,32 +1,50 @@
-# Airbnb Market Analysis
+# Airbnb Demand Proxy Modeling
 
 ## Executive Summary
-This repository presents a machine learning workflow for analyzing Airbnb demand behavior and predicting guest count as a regression problem. The project combines exploratory analysis with a reproducible training and evaluation pipeline to support data-driven market insights.
+This repository contains a reproducible machine learning workflow for modeling Airbnb demand proxy behavior as a regression task. It combines exploratory analysis in a notebook with a modular `src/` pipeline and automated unit tests.
 
 ## Project Objectives
-- Build a reliable baseline for guest count prediction.
-- Quantify model performance with standard regression metrics.
-- Surface the most influential predictors through feature importance.
-- Provide a clean, reproducible workflow for reruns and iteration.
+- Build baseline and model-based demand proxy predictions.
+- Compare model quality using MAE, RMSE, and R2.
+- Export explainability artifacts for both linear and tree-based models.
+- Keep the project reproducible via scriptable pipeline steps and tests.
 
 ## Analytical Scope
-The primary notebook is [Airbnb Market Analysis.ipynb](Airbnb Market Analysis.ipynb). Reproducible pipeline components are implemented in [src/data_loader.py](src/data_loader.py), [src/preprocess.py](src/preprocess.py), [src/train_model.py](src/train_model.py), and [src/evaluate.py](src/evaluate.py).
+The primary notebook is [Airbnb Demand Proxy Modeling.ipynb](Airbnb%20Demand%20Proxy%20Modeling.ipynb).
+
+Pipeline modules:
+- [src/data_loader.py](src/data_loader.py): synthetic regression data generation.
+- [src/preprocess.py](src/preprocess.py): train/test split and feature scaling.
+- [src/train_model.py](src/train_model.py): baseline and model training utilities.
+- [src/evaluate.py](src/evaluate.py): evaluation, metrics export, and summary artifact writing.
+- [src/run_pipeline.py](src/run_pipeline.py): end-to-end pipeline orchestration.
+
+Test modules:
+- [tests/test_data_loader.py](tests/test_data_loader.py)
+- [tests/test_preprocess.py](tests/test_preprocess.py)
+- [tests/test_train_model.py](tests/test_train_model.py)
+- [tests/test_evaluate.py](tests/test_evaluate.py)
 
 ## Methodology
-- Data preparation: train and test split with feature scaling.
-- Models: mean-line baseline, linear regression, and XGBoost regressor.
+- Data preparation: train and test split with scaled numerical features.
+- Models: mean baseline, linear regression, and XGBoost regressor.
 - Evaluation: MAE, RMSE, and R2 on holdout data.
-- Explainability: coefficient-based influence (linear regression) and feature importances (XGBoost).
+- Explainability: linear coefficients and XGBoost feature importances.
 
 ## Outputs
-- output/feature_importance.csv: combined feature importance table for linear regression and XGBoost.
-- output/validation_metrics.csv: regression metrics comparison across mean baseline, linear regression, and XGBoost.
-- output/summary.json: summary statistics and best-model snapshot by RMSE.
+- `output/feature_importance.csv`: combined importance table across supported models.
+- `output/validation_metrics.csv`: model-wise regression metrics sorted by RMSE.
+- `output/summary.json`: evaluated model names, best model by RMSE, and prediction summaries.
 
 ## Quick Run
 - Install dependencies: `pip install -r requirements.txt`
 - Run full pipeline: `python -m src.run_pipeline`
 - Run tests: `python -m unittest discover -s tests -v`
+
+## Validation and Error Handling
+- `load_data` validates that `n_samples >= 2`.
+- `split_and_scale` validates target-column existence, non-empty features, row count, and `test_size` bounds.
+- `evaluate_models_and_save_outputs` validates that predictions are non-empty, length-aligned with ground truth, and finite.
 
 ## Limitations
 - Current pipeline uses a synthetic dataset scaffold for deterministic demonstration.

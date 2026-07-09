@@ -16,12 +16,17 @@ def run_pipeline(
     output_dir: Path,
     random_state: int = 42,
     n_samples: int = 2000,
+    test_size: float = 0.2,
 ) -> dict[str, str]:
     """Train models, evaluate them, and write output artifacts."""
     output_dir.mkdir(parents=True, exist_ok=True)
 
     dataframe = load_data(random_state=random_state, n_samples=n_samples)
-    x_train, x_test, y_train, y_test = split_and_scale(dataframe)
+    x_train, x_test, y_train, y_test = split_and_scale(
+        dataframe,
+        test_size=test_size,
+        random_state=random_state,
+    )
     models = train_models(x_train, y_train, random_state=random_state)
 
     predictions = {

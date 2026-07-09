@@ -6,6 +6,9 @@ from sklearn.datasets import make_regression
 
 def load_data(random_state: int = 42, n_samples: int = 2000) -> pd.DataFrame:
     """Create a synthetic regression dataset for model training."""
+    if n_samples < 2:
+        raise ValueError("n_samples must be at least 2.")
+
     features, target = make_regression(
         n_samples=n_samples,
         n_features=12,

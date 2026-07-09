@@ -43,6 +43,23 @@ class EvaluateTests(unittest.TestCase):
             self.assertEqual(set(summary["models_evaluated"]), set(predictions.keys()))
             self.assertIn("best_model_by_rmse", summary)
 
+    def test_evaluate_models_raises_for_empty_predictions(self) -> None:
+        y_true = pd.Series([1.0, 2.0, 3.0])
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            with self.assertRaises(ValueError):
+                evaluate_models_and_save_outputs(y_true, {}, Path(temp_dir))
+
+    def test_evaluate_models_raises_for_mismatched_prediction_length(self) -> None:
+        y_true = pd.Series([1.0, 2.0, 3.0])
+        predictions = {
+            "linear_regression": np.array([1.0, 2.0]),
+        }
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            with self.assertRaises(ValueError):
+                evaluate_models_and_save_outputs(y_true, predictions, Path(temp_dir))
+
 
 if __name__ == "__main__":
     unittest.main()

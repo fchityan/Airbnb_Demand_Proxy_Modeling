@@ -8,6 +8,27 @@ import pandas as pd
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
 
+def _validate_predictions(
+    y_true: pd.Series,
+    predictions: dict[str, np.ndarray],
+) -> None:
+    if not predictions:
+        raise ValueError("predictions must include at least one model output.")
+
+    expected_length = len(y_true)
+    if expected_length == 0:
+        raise ValueError("y_true must not be empty.")
+
+    for model_name, y_pred in predictions.items():
+        if len(y_pred) != expected_length:
+            raise ValueError(
+                f"Prediction length mismatch for model '{model_name}': "
+                f"expected {expected_length}, got {len(y_pred)}."
+            )
+        if not np.isfinite(y_pred).all():
+            raise ValueError(f"Predictions for model '{model_name}' contain non-finite values.")
+
+
 def calculate_regression_metrics(y_true: pd.Series, y_pred: np.ndarray) -> dict[str, float]:
     """Calculate standard regression metrics."""
     return {
@@ -23,6 +44,7 @@ def evaluate_models_and_save_outputs(
     output_dir: Path,
 ) -> pd.DataFrame:
     """Evaluate multiple regression models and save metrics + summary artifacts."""
+    _validate_predictions(y_true, predictions)
     output_dir.mkdir(parents=True, exist_ok=True)
 
     metrics_rows: list[dict[str, float | str]] = []

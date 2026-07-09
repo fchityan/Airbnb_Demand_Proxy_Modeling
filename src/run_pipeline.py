@@ -49,6 +49,6 @@ def run_pipeline(
 
 
 if __name__ == "__main__":
-    generated = run_pipeline(output_dir=Path("output"))
+    generated = run_pipeline(output_dir=Path("outputs"))
     for name, path in generated.items():
         print(f"{name}: {path}")

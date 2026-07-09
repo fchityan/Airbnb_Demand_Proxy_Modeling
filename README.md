@@ -31,16 +31,23 @@ The workflow is orchestrated through [src/run_pipeline.py](src/run_pipeline.py),
 
 Run the complete pipeline with `python -m src.run_pipeline` or call `run_pipeline()` directly from Python with custom parameters (output directory, sample count, test split ratio, random seed).
 
+## Project Structure
+- `src/` contains the implementation code used by the pipeline.
+- `tests/` contains unit tests that verify the behavior of the matching modules in `src/`.
+- `outputs/` contains generated artifacts produced by the pipeline.
+
+The similar filenames in `src/` and `tests/` are intentional. For example, `tests/test_preprocess.py` validates the behavior in `src/preprocess.py`. This is a standard layout that keeps module ownership and test coverage easy to follow.
+
 ## Outputs
-- `output/feature_importance.csv`
+- `outputs/feature_importance.csv`
   - Purpose: interpret which features drive predictions across models.
   - Columns: `model`, `feature`, `importance`, `coefficient`.
   - Notes: `coefficient` is populated for linear regression and `NaN` for XGBoost rows.
-- `output/validation_metrics.csv`
+- `outputs/validation_metrics.csv`
   - Purpose: compare model quality on holdout data.
   - Columns: `model`, `mae`, `rmse`, `r2`.
   - Notes: rows are sorted by ascending `rmse`, so the first row is the top performer by RMSE.
-- `output/summary.json`
+- `outputs/summary.json`
   - Purpose: provide a quick, machine-readable report for downstream use.
   - Includes: evaluated models list, best model by RMSE, actual-target summary statistics, and per-model prediction summaries.
 

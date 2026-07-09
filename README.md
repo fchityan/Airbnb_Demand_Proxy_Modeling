@@ -15,29 +15,21 @@ This project highlights:
 - Export explainability artifacts for model interpretation.
 - Keep the workflow reproducible and testable.
 
-## Analytical Scope
-This project focuses on the machine learning workflow itself, from dataset creation through evaluation and artifact generation.
-
-In scope:
-- Exploratory notebook analysis in [Airbnb Demand Proxy Modeling.ipynb](Airbnb%20Demand%20Proxy%20Modeling.ipynb).
-- Reproducible pipeline modules:
-  - [src/data_loader.py](src/data_loader.py): synthetic regression data generation.
-  - [src/preprocess.py](src/preprocess.py): train/test split and feature scaling.
-  - [src/train_model.py](src/train_model.py): baseline and model training utilities.
-  - [src/evaluate.py](src/evaluate.py): metric computation and output persistence.
-  - [src/run_pipeline.py](src/run_pipeline.py): end-to-end orchestration.
-- Test coverage for data loading, preprocessing, training, and evaluation:
-  - [tests/test_data_loader.py](tests/test_data_loader.py)
-  - [tests/test_preprocess.py](tests/test_preprocess.py)
-  - [tests/test_train_model.py](tests/test_train_model.py)
-  - [tests/test_evaluate.py](tests/test_evaluate.py)
-
 ## Methodology
 - Data preparation: train/test split with standardized numerical features.
 - Models trained: linear regression and XGBoost regressor.
 - Prediction approaches evaluated: mean baseline, linear regression, and XGBoost.
 - Evaluation metrics: MAE, RMSE, and R2 on holdout data.
 - Explainability: linear coefficients and XGBoost feature importances.
+
+## Pipeline Architecture
+The workflow is orchestrated through [src/run_pipeline.py](src/run_pipeline.py), which chains together modular components:
+- **data_loader**: generates synthetic regression data with 12 features.
+- **preprocess**: splits train/test and standardizes features.
+- **train_model**: trains linear regression and XGBoost models.
+- **evaluate**: computes metrics and persists artifacts.
+
+Run the complete pipeline with `python -m src.run_pipeline` or call `run_pipeline()` directly from Python with custom parameters (output directory, sample count, test split ratio, random seed).
 
 ## Outputs
 - `output/feature_importance.csv`

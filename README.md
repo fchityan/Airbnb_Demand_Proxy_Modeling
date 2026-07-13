@@ -38,6 +38,20 @@ Run the complete pipeline with `python -m src.run_pipeline` or call `run_pipelin
 
 The similar filenames in `src/` and `tests/` are intentional. For example, `tests/test_preprocess.py` validates the behavior in `src/preprocess.py`. This is a standard layout that keeps module ownership and test coverage easy to follow.
 
+## Purpose of Key Folders
+- `src/`
+  - Source code for the end-to-end ML workflow.
+  - Includes data loading, preprocessing, model training, evaluation, and pipeline orchestration.
+  - This is the code you modify when improving model logic or features.
+- `tests/`
+  - Automated checks for the behavior in `src/`.
+  - Helps catch regressions when code changes (for example, incorrect metrics or broken preprocessing).
+  - Run before commits/PRs to maintain reliability and reproducibility.
+- `outputs/`
+  - Run artifacts produced by the pipeline.
+  - Intended for analysis/reporting and quick inspection of model quality.
+  - Regenerated on each run; treat as derived artifacts, not hand-edited files.
+
 ## Outputs
 - `outputs/feature_importance.csv`
   - Purpose: interpret which features drive predictions across models.
@@ -63,6 +77,26 @@ The similar filenames in `src/` and `tests/` are intentional. For example, `test
 - `load_data` validates that `n_samples >= 2`.
 - `split_and_scale` validates target-column existence, non-empty features, minimum row count, and `test_size` bounds.
 - `evaluate_models_and_save_outputs` validates that predictions are non-empty, aligned to ground-truth length, and finite.
+
+## Deployment Considerations
+- Data and schema management
+  - Replace synthetic generation with production ingestion and enforce explicit schema checks (column presence, types, ranges, null thresholds).
+  - Version input datasets and retain metadata (run timestamp, source version, row counts).
+- Reproducibility and model versioning
+  - Pin dependency versions and capture training configuration per run.
+  - Persist model artifacts with version tags and keep evaluation outputs tied to the same run ID.
+- Serving and inference
+  - Export preprocessing + model together to avoid train/serve skew.
+  - Define latency and throughput SLOs for batch or online prediction paths.
+- Monitoring and drift
+  - Track data drift and target/prediction distribution shifts.
+  - Monitor MAE/RMSE/R2 over time and set alert thresholds for degradation.
+- Security and governance
+  - Avoid storing sensitive data in plain artifacts.
+  - Add access controls, audit logs, and retention policies for data and model outputs.
+- CI/CD and operational readiness
+  - Run unit tests in CI on every pull request.
+  - Add a scheduled retraining/evaluation workflow and a rollback plan for model regressions.
 
 ## Limitations
 - Current pipeline uses synthetic data as a deterministic scaffold.

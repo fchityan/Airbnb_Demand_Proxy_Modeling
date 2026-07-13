@@ -1,4 +1,4 @@
-# Airbnb Demand Proxy Modeling
+# Airbnb Demand Proxy Modeling ML
 
 ## Executive Summary
 This repository demonstrates a production-minded machine learning workflow for demand proxy modeling using Airbnb-style data structures. It combines exploratory analysis in a notebook with a modular Python pipeline, automated evaluation outputs, and unit tests.
